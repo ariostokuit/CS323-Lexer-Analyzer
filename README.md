@@ -1,3 +1,3 @@
 # CS323-Lexer-Analyzer
 
-Group: Alex Mulvaney, 
+Group: Alex Mulvaney, Nicholas Webster
