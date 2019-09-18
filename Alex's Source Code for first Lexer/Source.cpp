@@ -29,7 +29,7 @@ bool isValidReal(string strVal);
 
 int main()
 {
-	cout << STATE_NAMES[lexerFSM("23.0.0")] << endl;
+	cout << STATE_NAMES[lexerFSM("23.00")] << endl;
 
 	return 0;
 
