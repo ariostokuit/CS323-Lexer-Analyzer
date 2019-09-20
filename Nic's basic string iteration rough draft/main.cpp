@@ -20,47 +20,6 @@ using namespace std;
 const vector<string> SEPARATORS_LIST = { "'", "(", ")", "[", "]", "{", "}", ",", ".", ":", ";", "!" };
 const vector<string> OPERATOR_LIST = { "*", "+", "-", "=", "/", ">", "<", "%" };
 
-void parseLetter(string &str, vector<string> &pL) {
-  /*
-    parseLetter checks for letters, numbers, and dollar signs.
-    All three are valid for an identifier name.
-    Once i+1 is not one of those three, it pushes the substring to the vector
-      which was passed by reference.
-    The FSM will later determie whether the string is a keyword or an identifier
-  */
-  for(int i=0; i<str.length(); i++) {
-    if(isalpha(str[i+1]) || isdigit(str[i+1]) || str[i+1] == '$') {
-      continue;
-    } else {
-      pL.push_back(str.substr(0, i+1));
-      str.erase(0, i+1);
-      return;
-    }
-  }
-}
-
-void parseNumber(string &str, vector<string> &pL) {
-  /*
-    parseNumber allows for digits and only ONE period.
-    If there's more than one period, cout a warning, but continue to run.
-    The FSM will later determine if it is a real or integer.
-  */
-  int periodCount = 0;
-
-  for(int i=0; i<str.length(); i++) {
-    if(isdigit(str[i+1])) {
-      continue;
-    } else if(str[i+1] == '.') {
-      periodCount++;
-      if(periodCount > 1) {cout << "\n\nWARNING: MORE THAN ONE PERIOD DETECTED!\n";}
-    } else {
-      pL.push_back(str.substr(0, i+1));
-      str.erase(0, i+1);
-      return;
-    }
-  }
-}
-
 vector<string> parse(string str1) {
 
   /*
@@ -80,24 +39,58 @@ vector<string> parse(string str1) {
   do {
   ////////// IF LETTER //////////
   if(isalpha(str1[0])) {
-    parseLetter(str1, pList);
+    /*
+      Checks for letters, numbers, and dollar signs.
+      All three are valid for an identifier name.
+      Once i+1 is not one of those three, it pushes the substring to the vector
+        which was passed by reference.
+      The FSM will later determine whether the string is
+        a keyword or an identifier
+    */
+    for(int i=0; i<str1.length(); i++) {
+      if(isalpha(str1[i+1]) || isdigit(str1[i+1]) || str1[i+1] == '$') {
+        continue;
+      } else {
+        pList.push_back(str1.substr(0, i+1));
+        str1.erase(0, i+1);
+        break;
+      }
+    }
     atZero.assign(str1, 0, 1);
   }
 
   ////////// IF NUMBER //////////
   if(isdigit(str1[0])) {
-    parseNumber(str1, pList);
+  /* Allows for digits and only ONE period.
+     If there's more than one period, output a warning and continue to run.
+     The FSM will later determine if it is a real or integer. */
+    int periodCount = 0;
+
+    for(int i=0; i<str1.length(); i++) {
+      if(isdigit(str1[i+1])) {
+        continue;
+      } else if(str1[i+1] == '.') {
+        periodCount++;
+        if(periodCount > 1) {cout << "\n\nWARNING: MORE THAN ONE PERIOD DETECTED!\n";}
+      } else {
+        pList.push_back(str1.substr(0, i+1));
+        str1.erase(0, i+1);
+        break;
+      }
+    }
     atZero.assign(str1, 0, 1);
   }
 
-  ////////// IF WHITESPACE -> ERASE //////////
+  ////////// IF WHITESPACE //////////
   if(isblank(str1[0])) {
+    // All whitespaces are erased and the zero index is reassigned
     str1.erase(0, 1);
     atZero.assign(str1, 0, 1);
   }
 
-  ////////// IF COMMENT -> ERASE ENTIRE COMMENT //////////
+  ////////// IF COMMENT //////////
   if(str1[0] == '!') {
+    // Entire comments are erased and the zero index is reassigned
     for(int i = 1; i<str1.size(); i++) {
       if(str1[i] == '!') {
         str1.erase(0, i+1);
@@ -108,6 +101,9 @@ vector<string> parse(string str1) {
 
   ////////// IF SEPARATOR //////////
   for(int i = 0; i<SEPARATORS_LIST.size(); i++) {
+  /* Add seperator to the vector and erase from the string. Reassign zero index.
+     For this assignment, all possible separators are single characters.
+      example: "<<" is not yet accounted for. */
     if(atZero == SEPARATORS_LIST[i]) {
       pList.push_back(str1.substr(0, 1));
       str1.erase(0, 1);
@@ -117,6 +113,9 @@ vector<string> parse(string str1) {
 
   ////////// IF OPERATOR //////////
   for(int i = 0; i<OPERATOR_LIST.size(); i++) {
+  /* Add operator to the vector and erase from the string. Reassign zero index.
+     For this assignment, all possible operators are single characters.
+      example: "==" is not yet accounted for. */
      if(atZero == OPERATOR_LIST[i]) {
       pList.push_back(str1.substr(0, 1));
       str1.erase(0, 1);
