@@ -1,4 +1,14 @@
 // Nicholas Webster
+//
+// CPSC 323-02
+// Assignment 1
+
+/*DELETE THIS COMMENT BEFORE FINAL SUBMISSION
+  I wasn't able to compare str1[0] == SEPARATORS_LIST[i]. That requires
+  overloading the == operator (I think) and I didn't feel like doing that.
+  So I created the 'atZero' string and set it equal to the first
+  character in the string. Pretty janky but it works. Feel free to edit it
+*/
 
 #include <fstream>
 #include <iostream>
@@ -53,18 +63,20 @@ void parseNumber(string &str, vector<string> &pL) {
 
 vector<string> parse(string str1) {
 
+  /*
+    Create a string vector for the parsed elements and a string
+      for the zero index of the string being parsed.
+    Parse() will compare the zero index to the if statements.
+    If the condition is met, the substring is pushed back to the string vector
+      and the substring is erased from the string being parsed.
+    Once erased, the zero index must be updated immediately for
+      the next if condition.
+  */
+
   vector<string> pList;
   string atZero;
   atZero.assign(str1, 0, 1);
-/*DELETE THIS COMMENT BEFORE FINAL SUBMISSION
-  I wasn't able to compare str1[0] == SEPARATORS_LIST[i]. That requires
-  overloading the == operator (I think) and I didn't feel like doing that.
-  So I created the 'atZero' string and set it equal to the first
-  character in the string. Pretty janky but it works. Feel free to edit it
 
-  If there is more than one period in a number entry, it will give a
-  warning but continue to run. You can edit this if you like.
-*/
   do {
   ////////// IF LETTER //////////
   if(isalpha(str1[0])) {
@@ -118,8 +130,7 @@ vector<string> parse(string str1) {
 }
 
 string readFile(string fname){
-    string code = "";
-    string temp;
+    string code, temp;
     ifstream myFile(fname);
 
     if(myFile.is_open()){ //open the file
@@ -138,10 +149,10 @@ string readFile(string fname){
 int main() {
 
   vector<string> parsedList;
-  string file = "Code.txt";
-  string code = readFile(file);
+  string fileName = "Code.txt";
+  string codeToParse = readFile(fileName);
 
-  parsedList = parse(code);
+  parsedList = parse(codeToParse);
 
   cout << "\nparsedList contains: \n\n";
   for(int i = 0; i<parsedList.size(); i++) {
