@@ -1,0 +1,27 @@
+Tokens            Lexemes
+----------------------------
+keyword     =     int
+identifier  =     num1
+separator   =     ,
+identifier  =     num2
+separator   =     ,
+identifier  =     large$
+keyword     =     if
+separator   =     (
+identifier  =     num1
+operator    =     >
+identifier  =     num2
+separator   =     )
+separator   =     {
+identifier  =     large
+operator    =     =
+identifier  =     num1$
+separator   =     ;
+separator   =     }
+keyword     =     else
+separator   =     {
+identifier  =     large
+operator    =     =
+identifier  =     num2$
+separator   =     ;
+separator   =     }
